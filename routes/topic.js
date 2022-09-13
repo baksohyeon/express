@@ -13,7 +13,6 @@ router.get("*", function (request, response, next) {
 });
 
 router.get("/create", function (request, response) {
-  console.log("this is return");
   var title = "WEB - create";
   var list = template.list(request.list);
   var html = template.HTML(
@@ -39,8 +38,9 @@ router.post("/create_process", function (request, response) {
   var post = request.body;
   var title = post.title;
   var description = post.description;
+
   fs.writeFile(`data/${title}`, description, "utf8", function (err) {
-    response.writeHead(302, { Location: `/topic/${title}` });
+    response.redirect(`/topic/${title}`);
     response.end();
   });
 });
@@ -77,11 +77,11 @@ router.get("/update/:pageId", function (request, response) {
 router.post("/update_process", function (request, response) {
   var post = request.body;
   var id = post.id;
-  var title = post.title;
+  var updatedId = post.title;
   var description = post.description;
-  fs.rename(`data/${id}`, `data/${title}`, function (error) {
-    fs.writeFile(`data/${title}`, description, "utf8", function (err) {
-      response.redirect(`/topic/${title}`);
+  fs.rename(`data/${id}`, `data/${updatedId}`, function (error) {
+    fs.writeFile(`data/${updatedId}`, description, "utf8", function (err) {
+      response.redirect(`/topic/${updatedId}`);
       response.end();
     });
   });
